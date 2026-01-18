@@ -1,0 +1,94 @@
+from abc import ABC, abstractmethod
+
+# ============================================
+# 1. Clase Base Abstracta
+# ============================================
+class Vehiculo(ABC):
+    def __init__(self, marca, modelo, precio):
+        self.marca = marca
+        self.modelo = modelo
+        self.precio = precio
+
+    @abstractmethod
+    def mostrar_descripcion(self):
+        """Método que cada tipo de vehículo debe implementar."""
+        pass
+
+    def __str__(self):
+        """Permite imprimir el objeto directamente."""
+        return self.mostrar_descripcion()
+
+
+# ============================================
+# 2. Subclase Auto
+# ============================================
+class Auto(Vehiculo):
+    def __init__(self, marca, modelo, precio, puertas):
+        super().__init__(marca, modelo, precio)
+        self.puertas = puertas
+
+    def mostrar_descripcion(self):
+        return (f"AUTO | Marca: {self.marca} | Modelo: {self.modelo} | "
+                f"Puertas: {self.puertas} | Precio: ${self.precio}")
+
+
+# ============================================
+# 3. Subclase Motocicleta
+# ============================================
+class Motocicleta(Vehiculo):
+    def __init__(self, marca, modelo, precio, cilindrada):
+        super().__init__(marca, modelo, precio)
+        self.cilindrada = cilindrada
+
+    def mostrar_descripcion(self):
+        return (f"MOTO | Marca: {self.marca} | Modelo: {self.modelo} | "
+                f"Cilindrada: {self.cilindrada}cc | Precio: ${self.precio}")
+
+
+# ============================================
+# 4. Clase Agencia (Inventario)
+# ============================================
+class Agencia:
+    def __init__(self, nombre):
+        self.nombre = nombre
+        self.inventario = []
+
+    def agregar_vehiculo(self, vehiculo):
+        if isinstance(vehiculo, Vehiculo):
+            self.inventario.append(vehiculo)
+            print(f"{vehiculo.marca} {vehiculo.modelo} añadido al inventario.")
+        else:
+            print("Error: El objeto no es un vehículo válido.")
+
+    def mostrar_inventario(self):
+        print(f"\n--- Inventario de {self.nombre} ---")
+        if not self.inventario:
+            print("Inventario vacío.")
+        else:
+            for vehiculo in self.inventario:
+                print(vehiculo)  # gracias al método __str__
+        print("-----------------------------------\n")
+
+
+# ============================================
+# 5. EJECUCIÓN DEL SISTEMA
+# ============================================
+if __name__ == "__main__":
+
+    # Crear la agencia
+    agencia = Agencia("UTPL")
+
+    # Crear vehículos
+    auto1 = Auto("Kia", "Sportage", 32000, 4)
+    auto2 = Auto("Chevrolet", "Camaro", 58000, 2)
+    moto1 = Motocicleta("KTM", "Duke", 6000, 390)
+    moto2 = Motocicleta("Kawasaki", "Z900", 17800, 900)
+
+    # Agregar al inventario
+    agencia.agregar_vehiculo(auto1)
+    agencia.agregar_vehiculo(auto2)
+    agencia.agregar_vehiculo(moto1)
+    agencia.agregar_vehiculo(moto2)
+
+    # Mostrar el inventario completo
+    agencia.mostrar_inventario()
